@@ -5,7 +5,6 @@ import re
 
 app = FastAPI()
 
-# dozvoljavamo React aplikaciji (localhost:5173) da poziva API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,7 +14,6 @@ app.add_middleware(
 
 
 def cena_u_broj(cena):
-    # neki oglasi imaju "Rata kredita" u istoj koloni, pa uzimamo samo prvi red
     prva_linija = (cena or "").split("\n")[0]
     return int(re.sub(r"[^\d]", "", prva_linija) or 0)
 
@@ -47,7 +45,6 @@ def proceni(podaci: dict):
             "link": link,
         })
 
-    # najjeftiniji prvi
     oglasi.sort(key=lambda x: cena_u_broj(x["cena"]))
 
     return oglasi[:5]
