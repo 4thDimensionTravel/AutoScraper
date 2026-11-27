@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+selenium
+webdriver-manager
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
