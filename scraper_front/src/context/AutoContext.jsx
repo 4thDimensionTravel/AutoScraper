@@ -3,11 +3,12 @@ import { createContext, useContext, useState } from 'react'
 const AutoContext = createContext()
 
 export function AutoProvider({ children }) {
-  const [podaci, setPodaci] = useState(null)
+  const [rezultati, setRezultati] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [greska, setGreska] = useState('')
 
   return (
-    <AutoContext.Provider value={{ podaci, setPodaci, loading, setLoading }}>
+    <AutoContext.Provider value={{ rezultati, setRezultati, loading, setLoading, greska, setGreska }}>
       {children}
     </AutoContext.Provider>
   )

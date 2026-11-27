@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useAuto } from '../context/AutoContext'
 
+const API_URL = 'http://localhost:8000/proceni'
+
 const marke = ['Audi', 'BMW', 'Mercedes-Benz', 'Volkswagen', 'Opel', 'Renault', 'Škoda', 'Toyota']
 
 const modeli = {
@@ -17,7 +19,7 @@ const modeli = {
 const goriva = ['Benzin', 'Dizel', 'Benzin + Gas', 'Hibrid', 'Električni']
 
 function Forma() {
-  const { setPodaci, setLoading, loading } = useAuto()
+  const { setRezultati, setLoading, setGreska, loading } = useAuto()
 
   const [marka, setMarka] = useState('')
   const [model, setModel] = useState('')
@@ -26,7 +28,7 @@ function Forma() {
   const [kilometraza, setKilometraza] = useState('')
   const [snaga, setSnaga] = useState('')
 
-  const posalji = (event) => {
+  const posalji = async (event) => {
     event.preventDefault()
 
     const podaci = {
@@ -39,12 +41,22 @@ function Forma() {
     }
 
     setLoading(true)
+    setGreska('')
 
-    // ovde ce kasnije ici slanje podataka na backend (fetch)
-    setTimeout(() => {
-      setPodaci(podaci)
+    try {
+      const odgovor = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(podaci),
+      })
+      const rezultati = await odgovor.json()
+      setRezultati(rezultati)
+    } catch {
+      setRezultati(null)
+      setGreska('Greška pri povezivanju sa serverom.')
+    } finally {
       setLoading(false)
-    }, 1500)
+    }
   }
 
   return (
